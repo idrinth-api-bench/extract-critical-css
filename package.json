@@ -6,11 +6,15 @@
   "bin": {
     "iabiccss": "iabccss.js"
   },
+  "scripts": {
+    "prepublishOnly": "tsc -p tsconfig.json"
+  },
   "dependencies": {
     "css": "^3.0.0",
     "css-minify": "^2.0.0"
   },
   "devDependencies": {
+    "typescript": "^5.4.5",
     "@types/node": "^20.12.13"
   }
 }
