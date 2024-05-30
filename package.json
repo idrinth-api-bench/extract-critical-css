@@ -1,0 +1,16 @@
+{
+  "name": "@idrinth-api-bench/inline-critical-css",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "bin": {
+    "iabiccss": "iabccss.js"
+  },
+  "dependencies": {
+    "css": "^3.0.0",
+    "css-minify": "^2.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.13"
+  }
+}
