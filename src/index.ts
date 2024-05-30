@@ -96,6 +96,6 @@ const finalHash = hash.digest('hex');
 writeFileSync(`${source}/critical-${finalHash}.css`, await minify(stringify({type: 'stylesheet', stylesheet: {rules: critical,}})));
 writeFileSync(
     `${source}/../index.html`,
-    readFileSync(`${source}/../index.html`, 'utf8').replace(/<\/head>/iug, `<link rel="stylesheet" href="/assets/critical-${finalHash}.css" </head>`),
+    readFileSync(`${source}/../index.html`, 'utf8').replace(/<\/head>/iug, `<link rel="stylesheet" href="/assets/critical-${finalHash}.css"/></head>`),
     'utf8',
 )
