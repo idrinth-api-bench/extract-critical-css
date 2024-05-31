@@ -9,8 +9,8 @@ import {
 } from 'fs';
 import {
     createHash,
-} from "crypto";
-import minify from "css-minify"
+} from 'crypto';
+import minify from 'css-minify'
 
 const source = `${ process.cwd() }/dist/assets`;
 const critical = [];
@@ -93,9 +93,22 @@ for (const file of readdirSync(source, 'utf8')) {
     }
 }
 const finalHash = hash.digest('hex');
-writeFileSync(`${source}/critical-${finalHash}.css`, await minify(stringify({type: 'stylesheet', stylesheet: {rules: critical,}})));
-writeFileSync(
-    `${source}/../index.html`,
-    readFileSync(`${source}/../index.html`, 'utf8').replace(/<\/head>/iug, `<link rel="stylesheet" href="/assets/critical-${finalHash}.css"/></head>`),
-    'utf8',
-)
+const index = readFileSync(`${source}/../index.html`, 'utf8');
+const styles = await minify(stringify({
+    type: 'stylesheet',
+    stylesheet: {rules: critical,}
+}));
+if (process.argv.indexOf('--inline') !== -1) {
+    writeFileSync(
+        `${source}/../index.html`,
+        index.replace(/<\/title>/iug, `</title><style>${styles}</style>`),
+        'utf8',
+    );
+} else {
+    writeFileSync(`${source}/critical-${finalHash}.css`, styles);
+    writeFileSync(
+        `${source}/../index.html`,
+        index.replace(/<\/title>/iug, `</title><link rel="stylesheet" href="/assets/critical-${finalHash}.css"/>`),
+        'utf8',
+    );
+}
