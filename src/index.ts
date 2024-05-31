@@ -105,7 +105,7 @@ if (process.argv.includes('--inline')) {
         index
             .replace(/<link rel="stylesheet"/iug, '<link rel="preload" as="style"')
             .replace(/<\/style>/iug, `${styles}</style>`)
-            .replace(/<\/body>/iug, `<script>const n=document.createElement('link');n.setAttribute('rel','stylesheet');n.setAttribute('href','${sheet}');document.getElementsByTagName('head')[0].insertBefore(document.getElementsByTagName('style')[0],n)</script></body>`),
+            .replace(/<\/body>/iug, `<script>(()=>{const n=document.createElement('link');n.setAttribute('rel','stylesheet');n.setAttribute('href','${sheet}');document.getElementsByTagName('head')[0].appendChild(n);n.parentElement.insertBefore(n, document.getElementsByTagName('style')[0])})()</script></body>`),
         'utf8',
     );
 } else {
