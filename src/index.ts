@@ -98,17 +98,22 @@ const styles = await minify(stringify({
     type: 'stylesheet',
     stylesheet: {rules: critical,}
 }));
-if (process.argv.indexOf('--inline') !== -1) {
+if (process.argv.includes('--inline')) {
+    const sheet = index.match(/<link rel="stylesheet" crossorigin href="(.+?)">/ui)[1];
     writeFileSync(
         `${source}/../index.html`,
-        index.replace(/<\/title>/iug, `</title><style>${styles}</style>`),
+        index
+            .replace(/<link rel="stylesheet"/iug, '<link rel="preload" as="style"')
+            .replace(/<\/style>/iug, `${styles}</style>`)
+            .replace(/<\/body>/iug, `<script>const n = document.createElement('link');n.setAttribute('rel','stylesheet')n.setAttribute('href','${sheet}');document.getElementsByTagName('head')[0].appendChild(n)</script></body>`),
         'utf8',
     );
 } else {
     writeFileSync(`${source}/critical-${finalHash}.css`, styles);
     writeFileSync(
         `${source}/../index.html`,
-        index.replace(/<\/title>/iug, `</title><link rel="stylesheet" href="/assets/critical-${finalHash}.css"/>`),
+        index
+            .replace(/<\/head>/iug, `<link rel="stylesheet" href="/assets/critical-${finalHash}.css"/></head>`),
         'utf8',
     );
 }
