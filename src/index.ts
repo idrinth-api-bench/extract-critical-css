@@ -98,7 +98,17 @@ const styles = await minify(stringify({
     type: 'stylesheet',
     stylesheet: {rules: critical,}
 }));
-if (process.argv.includes('--inline')) {
+if (process.argv.includes('--inline-all')) {
+    const sheet = index.match(/<link rel="stylesheet" crossorigin href="(.+?)">/ui)[1];
+    const content = readFileSync('dist/' + sheet, 'utf8');
+    writeFileSync(
+        `${source}/../index.html`,
+        index
+            .replace(/<link rel="stylesheet".+?>/iug, `<style>${content}</style>`)
+            .replace(/<\/style>/iug, `</style><style>${styles}</style>`),
+        'utf8',
+    );
+} else if (process.argv.includes('--inline')) {
     const sheet = index.match(/<link rel="stylesheet" crossorigin href="(.+?)">/ui)[1];
     writeFileSync(
         `${source}/../index.html`,
