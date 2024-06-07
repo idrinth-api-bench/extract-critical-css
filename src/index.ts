@@ -100,7 +100,7 @@ const styles = await minify(stringify({
 }));
 if (process.argv.includes('--inline-all')) {
     const sheet = index.match(/<link rel="stylesheet" crossorigin href="(.+?)">/ui)[1];
-    const content = readFileSync('dist/' + sheet, 'utf8');
+    const content = readFileSync('dist/' + sheet.replace(/https?:\/\/[^/]+\//ugi, ''), 'utf8');
     writeFileSync(
         `${source}/../index.html`,
         index
